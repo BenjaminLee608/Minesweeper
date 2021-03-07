@@ -98,16 +98,23 @@ function hideAllValues(){
 }
 
 function clickCell(cell){
+    if(lost){
+        return;
+    }
+
+    let x = cell.parentNode.rowIndex;
+    let y = cell.cellIndex;
     var cellData = cell.getAttribute("cellData");
+
     if(cellData == -1){
         cell.classList.add("bomb");
         cell.innerHTML = "<img src=\'bomb.png\' alt=\'hello\'/>";
+        lost = true;
+        showBombs(x,y);
         console.log("GAMEOVER");
     }
 
     else if(!cell.classList.contains("clicked")){
-        let x = cell.parentNode.rowIndex;
-        let y = cell.cellIndex;
         if(cellData == 0){
             clickZeros(x, y);
         }
@@ -121,6 +128,16 @@ function clickCell(cell){
         checkWinCondition();
 
         //console.log(cell.getAttribute("cellData"));
+    }
+}
+
+function showBombs(x,y){
+    for(let i = 0; i < height; i++){
+        for(let j = 0; j < width; j++){
+            if(GRID.rows[i].cells[j].getAttribute("cellData") == -1 && (i != x || j != y)){
+                GRID.rows[i].cells[j].innerHTML = "<img src=\'bomb.png\' alt=\'hello\'/>";
+            }
+        }
     }
 }
 
@@ -168,9 +185,10 @@ function initalizeGame(){
 }
 
 function resetGame(){
-
+    GRID.innerHTML = "";
     initalizeGame();
     hideAllValues();
+    lost = false;
 }
 
 

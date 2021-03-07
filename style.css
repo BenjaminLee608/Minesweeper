@@ -11,7 +11,7 @@ footer{
     position: relative;
     text-align: center;
     padding: 0px;
-    margin-top: 5em;
+    margin-top: 4em;
     margin-bottom: 1em;
 }
 
@@ -46,14 +46,14 @@ h2{
 
 
 table{
-    margin-top: 4em;
+    margin-top: 3em;
     margin-left: auto;
     margin-right: auto;
     border: 1px solid #808080;
 }
 
 button{
-    margin-top: 1em;
+    margin-top: 2em;
 }
 
 #grid TR TD{
