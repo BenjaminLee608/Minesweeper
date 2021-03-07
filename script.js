@@ -37,6 +37,9 @@ function createGrid(){
             var cell = row.insertCell(j);
             cell.onclick = function(){
                 clickCell(this);
+                if(TESTING){
+                    showAllValues()
+                }
             };
             var data = document.createAttribute("cellData");
             data.value = 0;
@@ -101,6 +104,25 @@ function hideAllValues(){
     console.log("reset");
 }
 
+function countBombs(x,y){
+    let bombs = 0;
+    for(let j = x-1; j < x+2; j++){
+        if(j < 0 || j >= height){
+            continue;
+        }
+        for(let k = y-1; k < y+2; k++){
+            if(k< 0 || k >= width){
+                continue;
+            }
+
+            if(GRID.rows[j].cells[k].getAttribute("cellData") == -1){
+                bombs++;
+            }
+        }
+    }
+    return bombs;
+}
+
 function clickCell(cell){
     if(lost){
         return;
@@ -110,32 +132,95 @@ function clickCell(cell){
     let y = cell.cellIndex;
     var cellData = cell.getAttribute("cellData");
 
-    if(cellData == -1){
-        if(firstClick){
-            addMines(1);
-            let bombs = 0;
-            cell.setAttribute("cellData",0);
-            for(let j = x-1; j < x+2; j++){
-                if(j < 0 || j >= height){
+//FIRST CLICK (guarenteed 3x3)
+    if(firstClick && cellData != 0){
+        firstClick = false;
+        bombs = countBombs(x,y); //bombs = number of bombs surrounding click
+        //console.log(bombs);
+
+        for(let j = x-1; j < x+2; j++){ // sets all squares next to click to bombs (so that when we add new bombs they cannot be in this square)
+            if(j < 0 || j >= height){
+                continue;
+            }
+            for(let k = y-1; k < y+2; k++){
+                if(k< 0 || k >= width){
                     continue;
                 }
-                for(let k = y-1; k < y+2; k++){
-                    if(k< 0 || k >= width){
-                        continue;
-                    }
-
-                    if(GRID.rows[j].cells[k].getAttribute("cellData") == -1){
-                        bombs++;
-                    }
-                }
+                GRID.rows[j].cells[k].setAttribute("cellData",-1);
             }
-            cell.setAttribute("cellData",bombs);
-            cell.classList.add("clicked");
-            cell.innerHTML = cell.getAttribute("cellData");
+        }
+        addMines(bombs); //Adds enough bombs to replace old bombs
 
-            return;
+        for(let j = x-1; j < x+2; j++){ // sets everything around click to 0
+            if(j < 0 || j >= height){
+                continue;
+            }
+            for(let k = y-1; k < y+2; k++){
+                if(k< 0 || k >= width){
+                    continue;
+                }
+                GRID.rows[j].cells[k].setAttribute("cellData",0);
+            }
         }
 
+        for(let j = x-1; j < x+2; j++){ // Sets all values around mouseclick to correct value
+            if(j < 0 || j >= height){
+                continue;
+            }
+            for(let k = y-1; k < y+2; k++){
+                if(k< 0 || k >= width){
+                    continue;
+                }
+                newCell = GRID.rows[j].cells[k];
+                bombs = countBombs(j,k);
+                newCell.setAttribute("cellData",bombs);
+            }
+        }
+
+        for(let j = x-1; j < x+2; j++){ //Clicks all non-zero values around cursor
+            if(j < 0 || j >= height){
+                continue;
+            }
+            for(let k = y-1; k < y+2; k++){
+                if(k< 0 || k >= width){
+                    continue;
+                }
+                newCell = GRID.rows[j].cells[k];
+                if(!newCell.classList.contains("clicked") && cell!= 0){
+                    clickCell(newCell);
+                }
+                else if(!newCell.classList.contains("clicked") && cell == 0){
+                    clickZero(newCell);
+                }
+            }
+        }
+/*
+        for(let j = x-1; j < x+2; j++){ //Clicks all zero values around cursor
+            if(j < 0 || j >= height){
+                continue;
+            }
+            for(let k = y-1; k < y+2; k++){
+                if(k< 0 || k >= width){
+                    continue;
+                }
+
+                if(!cell.classList.contains("clicked")){
+                    newCell = GRID.rows[j].cells[k];
+                    clickCell(newCell);
+                }
+            }
+        }
+*/
+        //console.log(clicked);
+        //console.log(numTiles);
+
+        return;
+    }
+
+//End of firstClick
+
+
+    if(cellData == -1){
         cell.classList.add("bomb");
         cell.innerHTML = "<img src=\'bomb.png\' alt=\'hello\'/>";
         lost = true;
@@ -175,7 +260,7 @@ function clickZeros(x, y){
     var cell = GRID.rows[x].cells[y];
     clicked++;
     cell.classList.add("clicked");
-    cell.innerHTML = cell.getAttribute("");
+    cell.innerHTML = "";
     for(let j = x-1; j < x+2; j++){
         if(j < 0 || j >= height){
             continue;
@@ -186,14 +271,10 @@ function clickZeros(x, y){
             }
             cell = GRID.rows[j].cells[k]
             if(cell.getAttribute("cellData") == 0 && !cell.classList.contains("clicked")){
-
                 clickZeros(j,k);
             }else{
                 clickCell(GRID.rows[j].cells[k]);
             }
-
-
-
         }
     }
 }
@@ -211,7 +292,6 @@ function initalizeGame(){
     if(TESTING){
         showAllValues()
     }
-
 }
 
 function resetGame(){
@@ -222,9 +302,10 @@ function resetGame(){
     clicked = 0;
     firstClick = true;
     numTiles = height*width - numMines;
+    if(TESTING){
+        showAllValues()
+    }
 }
-
-
 
 RESETBUTTON.addEventListener("click", resetGame, false);
 EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10;resetGame();}, false);
