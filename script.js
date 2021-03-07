@@ -6,14 +6,14 @@ var height = 8;
 var width = 8;
 var numMines = 10;
 var numTiles = height*width - numMines;
-var gridArray = new Array(height);
-
-
 var clicked = 0;
 
+var lost = false;
 
 const TESTING = 0;
 
+/*
+var gridArray = new Array(height);
 function createArray(){
     for(let i = 0; i < height; i++){
         gridArray[i] = new Array(width);
@@ -23,7 +23,7 @@ function createArray(){
     }
     console.log(gridArray);
 }
-
+*/
 
 function createGrid(){
 
@@ -100,6 +100,8 @@ function hideAllValues(){
 function clickCell(cell){
     var cellData = cell.getAttribute("cellData");
     if(cellData == -1){
+        cell.classList.add("bomb");
+        cell.innerHTML = "<img src=\'bomb.png\' alt=\'hello\'/>";
         console.log("GAMEOVER");
     }
 
@@ -156,7 +158,7 @@ function checkWinCondition(){
 }
 
 function initalizeGame(){
-    createArray();
+    //createArray();
     createGrid();
     addMines();
     if(TESTING){
