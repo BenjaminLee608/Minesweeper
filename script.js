@@ -1,5 +1,7 @@
 const GRID = document.querySelector("#grid");
 const RESETBUTTON = document.querySelector("#reset");
+const EASYBUTTON = document.querySelector("#diffEasy");
+const HARDBUTTON = document.querySelector("#diffHard");
 
 var difficulty = "beginner";
 var height = 8;
@@ -9,8 +11,10 @@ var numTiles = height*width - numMines;
 var clicked = 0;
 
 var lost = false;
+var firstClick = true;
 
 const TESTING = 0;
+
 
 /*
 var gridArray = new Array(height);
@@ -45,9 +49,9 @@ function createGrid(){
     console.log(GRID);
 }
 
-function addMines(){
+function addMines(num){
 
-    for(let i = 0; i < numMines; i++){
+    for(let i = 0; i < num; i++){
         let x = Math.floor(Math.random()*height);
         let y = Math.floor(Math.random()*width);
         var cellData = GRID.rows[x].cells[y];
@@ -106,7 +110,35 @@ function clickCell(cell){
     let y = cell.cellIndex;
     var cellData = cell.getAttribute("cellData");
 
+
     if(cellData == -1){
+        if(firstClick){
+            addMines(1);
+            let bombs = 0;
+            cell.setAttribute("cellData",0);
+            for(let j = x-1; j < x+2; j++){
+                if(j < 0 || j >= height){
+                    continue;
+                }
+                for(let k = y-1; k < y+2; k++){
+                    if(k< 0 || k >= width){
+                        continue;
+                    }
+
+                    if(GRID.rows[j].cells[k].getAttribute("cellData") == -1){
+                        bombs++;
+                    }
+                }
+            }
+            cell.setAttribute("cellData",bombs);
+            cell.classList.add("clicked");
+            cell.innerHTML = cell.getAttribute("cellData");
+
+            return;
+
+
+        }
+
         cell.classList.add("bomb");
         cell.innerHTML = "<img src=\'bomb.png\' alt=\'hello\'/>";
         lost = true;
@@ -177,7 +209,7 @@ function checkWinCondition(){
 function initalizeGame(){
     //createArray();
     createGrid();
-    addMines();
+    addMines(numMines);
     if(TESTING){
         showAllValues()
     }
@@ -194,6 +226,7 @@ function resetGame(){
 
 
 RESETBUTTON.addEventListener("click", resetGame, false);
-
+EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10;resetGame();}, false);
+HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;resetGame();}, false);
 console.log("hi");
 initalizeGame();
