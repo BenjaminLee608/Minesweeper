@@ -50,11 +50,20 @@ function addMines(height, width){
 
     }
 }
+function setValues(height, width){
+    for(let i = 0; i < height; i++){
+        for(let j = 0; j < width; j++){
+            var cellData = GRID.rows[i].cells[j];
+            cellData.innerHTML = cellData.getAttribute("cellData");
+        }
+    }
+}
 
 function initalizeGame(height, width){
     createArray(height, width);
     createGrid(height, width);
     addMines(height, width);
+    setValues(height, width)
 }
 
 
