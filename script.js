@@ -2,6 +2,8 @@ const GRID = document.querySelector("#grid");
 const RESETBUTTON = document.querySelector("#reset");
 const EASYBUTTON = document.querySelector("#diffEasy");
 const HARDBUTTON = document.querySelector("#diffHard");
+const TILECOUNTER = document.querySelector("#tileCounter");
+const BOMBCOUNTER = document.querySelector("#bombCounter");
 
 var difficulty = "beginner";
 var height = 8;
@@ -9,6 +11,7 @@ var width = 8;
 var numMines = 10;
 var numTiles = height*width - numMines;
 var clicked = 0;
+var flagCounter = 0;
 
 var lost = false;
 var firstClick = true;
@@ -40,6 +43,7 @@ function createGrid(){
                 if(TESTING){
                     showAllValues()
                 }
+                updateCounters()
             };
             var data = document.createAttribute("cellData");
             data.value = 0;
@@ -289,9 +293,16 @@ function initalizeGame(){
     //createArray();
     createGrid();
     addMines(numMines);
+    updateCounters()
+
     if(TESTING){
         showAllValues()
     }
+}
+
+function updateCounters(){
+    //TILECOUNTER.innerHTML = clicked;
+    //BOMBCOUNTER.innerHTML = numMines - flagCounter;
 }
 
 function resetGame(){
@@ -302,6 +313,7 @@ function resetGame(){
     clicked = 0;
     firstClick = true;
     numTiles = height*width - numMines;
+    updateCounters()
     if(TESTING){
         showAllValues()
     }
