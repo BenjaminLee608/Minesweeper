@@ -105,19 +105,44 @@ function clickCell(cell){
     else if(!cell.classList.contains("clicked")){
         let x = cell.parentNode.rowIndex;
         let y = cell.cellIndex;
-        cell.classList.add("clicked");
-        cell.innerHTML = cell.getAttribute("cellData");
-
-        if(cell.getAttribute("cellData") == 0){
+        if(cellData == 0){
             clickZeros(x, y);
         }
+        else{
+            cell.classList.add("clicked");
+            cell.innerHTML = cell.getAttribute("cellData");
+        }
+
+
 
         //console.log(cell.getAttribute("cellData"));
     }
 }
 
 function clickZeros(x, y){
-    
+    var cell = GRID.rows[x].cells[y];
+    cell.classList.add("clicked");
+    cell.innerHTML = cell.getAttribute("");
+    for(let j = x-1; j < x+2; j++){
+        if(j < 0 || j >= height){
+            continue;
+        }
+        for(let k = y-1; k < y+2; k++){
+            if(k< 0 || k >= width){
+                continue;
+            }
+            cell = GRID.rows[j].cells[k]
+            if(cell.getAttribute("cellData") == 0 && !cell.classList.contains("clicked")){
+
+                clickZeros(j,k);
+            }else{
+                clickCell(GRID.rows[j].cells[k]);
+            }
+
+
+
+        }
+    }
 }
 
 
