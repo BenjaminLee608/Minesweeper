@@ -110,7 +110,6 @@ function clickCell(cell){
     let y = cell.cellIndex;
     var cellData = cell.getAttribute("cellData");
 
-
     if(cellData == -1){
         if(firstClick){
             addMines(1);
@@ -135,8 +134,6 @@ function clickCell(cell){
             cell.innerHTML = cell.getAttribute("cellData");
 
             return;
-
-
         }
 
         cell.classList.add("bomb");
@@ -161,6 +158,7 @@ function clickCell(cell){
 
         //console.log(cell.getAttribute("cellData"));
     }
+    firstClick = false;
 }
 
 function showBombs(x,y){
@@ -221,12 +219,15 @@ function resetGame(){
     initalizeGame();
     hideAllValues();
     lost = false;
+    clicked = 0;
+    firstClick = true;
+    numTiles = height*width - numMines;
 }
 
 
 
 RESETBUTTON.addEventListener("click", resetGame, false);
 EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10;resetGame();}, false);
-HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;resetGame();}, false);
+HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;numTiles = height*width - numMines;resetGame();}, false);
 console.log("hi");
 initalizeGame();
