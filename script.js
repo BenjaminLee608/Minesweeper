@@ -23,6 +23,9 @@ function createGrid(height, width){
         var row = GRID.insertRow(i);
         for(let j = 0; j < width; j++){
             var cell = row.insertCell(j);
+            cell.onclick = function(){
+                clickCell(this);
+            };
             var data = document.createAttribute("cellData");
             data.value = 0;
             cell.setAttributeNode(data);
@@ -59,6 +62,21 @@ function setValues(height, width){
     }
 }
 
+function clickCell(cell){
+    var cellData = cell.getAttribute("cellData");
+    if(cellData == -1){
+        console.log("GAMEOVER");
+    }
+
+    else if(!cell.classList.contains("clicked")){
+        cell.classList.add("clicked");
+        console.log(cell.getAttribute("cellData"));
+    }
+
+
+
+}
+
 function initalizeGame(height, width){
     createArray(height, width);
     createGrid(height, width);
@@ -67,5 +85,5 @@ function initalizeGame(height, width){
 }
 
 
-
+console.log("hi");
 initalizeGame(height, width);
