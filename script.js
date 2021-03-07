@@ -16,7 +16,7 @@ var flagCounter = 0;
 var lost = false;
 var firstClick = true;
 
-const TESTING = 0;
+const TESTING = 1;
 
 
 /*
@@ -56,7 +56,7 @@ function createGrid(){
     }
     //
 
-    console.log(GRID);
+    //console.log(GRID);
 }
 
 function addMines(num){
@@ -108,7 +108,7 @@ function hideAllValues(){
             cellData.innerHTML = "";
         }
     }
-    console.log("reset");
+    //console.log("reset");
 }
 
 function countBombs(x,y){
@@ -124,6 +124,7 @@ function countBombs(x,y){
 
             if(GRID.rows[j].cells[k].getAttribute("cellData") == -1){
                 bombs++;
+                console.log("bombX: " + j + " bombY: " + k);
             }
         }
     }
@@ -134,17 +135,20 @@ function clickCell(cell){
     if(lost || cell.classList.contains("flagged")){
         return;
     }
-
     let x = cell.parentNode.rowIndex;
     let y = cell.cellIndex;
     var cellData = cell.getAttribute("cellData");
 
 //FIRST CLICK (guarenteed 3x3)
-    if(firstClick && cellData != 0){
+    while(firstClick && cellData != 0){
         firstClick = false;
         bombs = countBombs(x,y); //bombs = number of bombs surrounding click
-        //console.log(bombs);
+        if(!bombs){
+            break;
+        }
 
+        //console.log(bombs);
+        if(TESTING) console.log("bombs1: " + bombs);
         for(let j = x-1; j < x+2; j++){ // sets all squares next to click to bombs (so that when we add new bombs they cannot be in this square)
             if(j < 0 || j >= height){
                 continue;
@@ -152,6 +156,11 @@ function clickCell(cell){
             for(let k = y-1; k < y+2; k++){
                 if(k< 0 || k >= width){
                     continue;
+                }
+                if(TESTING){
+                    console.log("x: " + x  + ", y: " + y);
+                    console.log(j + ", " + k);
+
                 }
                 GRID.rows[j].cells[k].setAttribute("cellData",-1);
             }
@@ -225,14 +234,14 @@ function clickCell(cell){
     }
 
 //End of firstClick
-
+    firstClick = false;
 
     if(cellData == -1){
         cell.classList.add("bomb");
         cell.innerHTML = "<img src=\'bomb.png\' class=\'flag\' alt=\'hello\'/>";
         lost = true;
         showBombs(x,y);
-        console.log("GAMEOVER");
+        //console.log("GAMEOVER");
     }
 
     else if(!cell.classList.contains("clicked")){
@@ -244,13 +253,13 @@ function clickCell(cell){
             cell.classList.add("clicked");
             cell.innerHTML = cell.getAttribute("cellData");
         }
-        console.log(clicked);
-        console.log(numTiles);
+        //console.log(clicked);
+        //console.log(numTiles);
         checkWinCondition();
 
         //console.log(cell.getAttribute("cellData"));
     }
-    firstClick = false;
+
 }
 
 function showBombs(x,y){
@@ -312,7 +321,7 @@ function updateCounters(){
 }
 
 function addFlag(cell){
-    if(!cell.classList.contains("clicked") && !firstClick){
+    if(!cell.classList.contains("clicked") && !firstClick && !lost){
         if(cell.classList.contains("flagged")){
             cell.classList.remove("flagged");
             cell.innerHTML = "";
