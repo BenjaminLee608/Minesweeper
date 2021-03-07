@@ -5,11 +5,26 @@ body{
     background-color: #DCDCDC;
 }
 
-h1,h2{
+footer{
+
+    bottom: 0%;
+    position: relative;
+    text-align: center;
+    padding: 0px;
+    margin-top: 5em;
+    margin-bottom: 1em;
+}
+
+h1,h2,p{
     font-family: 'DotGothic16', sans-serif;
     margin-block-start: 0em;
     margin-block-end: 0em;
     text-align: center;
+}
+
+p{
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
 }
 
 h1{
@@ -25,8 +40,9 @@ h2{
 
 }
 
+
 table{
-    margin-top: 1em;
+    margin-top: 4em;
     margin-left: auto;
     margin-right: auto;
     border: 1px solid #808080;

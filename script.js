@@ -5,6 +5,7 @@ var difficulty = "beginner";
 var height = 8;
 var width = 8;
 var numMines = 10;
+var numTiles = height*width - numMines;
 var gridArray = new Array(height);
 
 
@@ -109,11 +110,13 @@ function clickCell(cell){
             clickZeros(x, y);
         }
         else{
+            clicked++;
             cell.classList.add("clicked");
             cell.innerHTML = cell.getAttribute("cellData");
         }
-
-
+        console.log(clicked);
+        console.log(numTiles);
+        checkWinCondition();
 
         //console.log(cell.getAttribute("cellData"));
     }
@@ -121,6 +124,7 @@ function clickCell(cell){
 
 function clickZeros(x, y){
     var cell = GRID.rows[x].cells[y];
+    clicked++;
     cell.classList.add("clicked");
     cell.innerHTML = cell.getAttribute("");
     for(let j = x-1; j < x+2; j++){
@@ -145,7 +149,11 @@ function clickZeros(x, y){
     }
 }
 
-
+function checkWinCondition(){
+    if(clicked == numTiles){
+        console.log("Win!");
+    }
+}
 
 function initalizeGame(){
     createArray();
