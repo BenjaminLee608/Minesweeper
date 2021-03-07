@@ -47,6 +47,9 @@ function createGrid(){
             };
             var data = document.createAttribute("cellData");
             data.value = 0;
+            var onContextMenu = document.createAttribute("oncontextmenu");
+            onContextMenu.value="addFlag(this); return false";
+            cell.setAttributeNode(onContextMenu);
             cell.setAttributeNode(data);
             //console.log(cell.getAttribute("cellData"));
         }
@@ -128,7 +131,7 @@ function countBombs(x,y){
 }
 
 function clickCell(cell){
-    if(lost){
+    if(lost || cell.classList.contains("flagged")){
         return;
     }
 
@@ -226,7 +229,7 @@ function clickCell(cell){
 
     if(cellData == -1){
         cell.classList.add("bomb");
-        cell.innerHTML = "<img src=\'bomb.png\' alt=\'hello\'/>";
+        cell.innerHTML = "<img src=\'bomb.png\' class=\'flag\' alt=\'hello\'/>";
         lost = true;
         showBombs(x,y);
         console.log("GAMEOVER");
@@ -261,6 +264,9 @@ function showBombs(x,y){
 }
 
 function clickZeros(x, y){
+    if(GRID.rows[x].cells[y].classList.contains("flagged")){
+        return;
+    }
     var cell = GRID.rows[x].cells[y];
     clicked++;
     cell.classList.add("clicked");
@@ -303,6 +309,23 @@ function initalizeGame(){
 function updateCounters(){
     //TILECOUNTER.innerHTML = clicked;
     //BOMBCOUNTER.innerHTML = numMines - flagCounter;
+}
+
+function addFlag(cell){
+    if(!cell.classList.contains("clicked") && !firstClick){
+        if(cell.classList.contains("flagged")){
+            cell.classList.remove("flagged");
+            cell.innerHTML = "";
+        }
+        else{
+            cell.innerHTML = "<img src=\'flag.png\' alt=\'hello\'/>";
+            cell.classList.add("flagged");
+        }
+
+
+    }
+
+
 }
 
 function resetGame(){

@@ -81,17 +81,23 @@ button{
 #grid TR TD{
     border: 1px solid #A9A9A9;
     font-family: 'Press Start 2P', cursive;
-    font-weight: bold;
     width: 1.5em;
     height: 1.5em;
     color: white;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    left: 10px;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    text-align: center;
 }
 img{
     margin-top: .25em;
     margin-left: .1em;
     width: 1em;
     height: 1em;
+}
+
+.flag{
+    width:1.5em;
+    height: 1.5em;
 }
 
 #grid TR TD.clicked{
@@ -111,6 +117,8 @@ img{
     font-family: 'DotGothic16', sans-serif;
 
 }
+
+
 
 #grid TR TD[cellData="1"]{
   color: #2b96c4;
