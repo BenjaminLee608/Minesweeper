@@ -11,7 +11,7 @@ footer{
     text-align: center;
     padding: 0px;
     margin-top: 4em;
-    margin-bottom: 1em;
+    margin-bottom: 0em;
 }
 
 h1,h2,p, #counters li{
@@ -28,7 +28,7 @@ p{
 }
 
 h1{
-    font-size: 5em;
+    font-size: 4em;
     padding: 0px;
     text-shadow: 2px 2px #999999;
 }
@@ -123,7 +123,7 @@ table{
 }
 
 button{
-    margin-top: 1em;
+    margin-top: 1.5em;
 }
 
 #grid TR TD{
@@ -155,6 +155,10 @@ img{
     color: #b3b3b3;
 }
 
+#flagCounter{
+    margin-top: .5em;
+}
+
 .button{
     background-color: #708090; /* Green */
     border: 1px solid #2F4F4F;
@@ -163,6 +167,7 @@ img{
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    margin-top: 0em;
     font-size: 15px;
     font-family: 'DotGothic16', sans-serif;
 

@@ -449,11 +449,12 @@ function addFlag(cell){
 }
 
 function resetGame(){
+
     GRID.innerHTML = "";
     timer = 0;
     initalizeGame();
     clearTimer();
-    TIMER.innerHTML = "00:00:00";
+
     hideAllValues();
     lost = false;
     clicked = 0;
@@ -461,13 +462,14 @@ function resetGame(){
     numTiles = height*width - numMines;
     emoji.setAttribute("src", "images/sad.png");
     updateCounters()
+    miliseconds = 0;
     if(TESTING){
         showAllValues()
     }
 }
 
-RESETBUTTON.addEventListener("click", resetGame, false);
-EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10;resetGame();}, false);
-HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;numTiles = height*width - numMines;resetGame();}, false);
+RESETBUTTON.addEventListener("click", function(){resetGame();}, false);
+EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10; resetGame();}, false);
+HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;numTiles = height*width - numMines; resetGame();}, false);
 console.log("hi");
 initalizeGame();
