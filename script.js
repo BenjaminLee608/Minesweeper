@@ -457,6 +457,7 @@ function resetGame(){
     clicked = 0;
     firstClick = true;
     numTiles = height*width - numMines;
+    emoji.setAttribute("src", "sad.png");
     updateCounters()
     if(TESTING){
         showAllValues()
