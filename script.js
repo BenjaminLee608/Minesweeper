@@ -18,7 +18,7 @@ var miliseconds = 0;
 var seconds = 0;
 var minutes = 0;
 var hours = 0;
-var timerInterval;
+var timerInterval = null;
 
 
 var lost = false;
@@ -146,6 +146,7 @@ function countBombs2(x,y){
 }
 
 function displayTime(){
+
     miliseconds+= 10;
     if(miliseconds > 999){
         seconds++;
@@ -160,22 +161,26 @@ function displayTime(){
         seconds-=60;
     }
 
-    let ms = (miliseconds/10);
+    msFloor = miliseconds/10;
 
     let sec = seconds;
-    if (seconds < 10 || seconds == 0) {
+    if (seconds < 10) {
       sec = '0' + seconds;
     }
     let min = minutes;
-    if (min < 10 || min == 0) {
+    if (min < 10) {
       min = '0' + minutes;
     }
     let hr = "";
     if (hr > 0 && hr < 10) {
         hr = '0' + hours + ':';
     }
+    let ms = msFloor;
+    if (msFloor < 10) {
+        ms = '0' + msFloor;
+    }
 
-    timer.innerHTML = hr + min + ':' + sec + ':' + ms;
+    TIMER.innerHTML = hr + min + ':' + sec + ':' + ms;
 
 }
 
@@ -187,10 +192,11 @@ function clickCell(cell){
     let y = cell.cellIndex;
     var cellData = cell.getAttribute("cellData");
 
+    console.log(miliseconds);
     if(firstClick){
         console.log(TIMER.innerHTML);
         timerInterval = setInterval(displayTime,10);
-        console.log();
+
     }
 //FIRST CLICK (guarenteed 3x3)
     while(firstClick && cellData != 0){
@@ -327,9 +333,9 @@ function clickCell(cell){
 
     if(cellData == -1){
         cell.classList.add("bomb");
-        cell.innerHTML = "<img src=\'bomb.png\' class=\'flag\' alt=\'hello\'/>";
+        emoji.setAttribute("src", "images/dead.png");
+        cell.innerHTML = "<img src=\'images/bomb.png\' class=\'flag\' alt=\'hello\'/>";
         clearTimer();
-        timerInterval = null;
         lost = true;
         showBombs(x,y);
         //console.log("GAMEOVER");
@@ -357,7 +363,7 @@ function showBombs(x,y){
     for(let i = 0; i < height; i++){
         for(let j = 0; j < width; j++){
             if(GRID.rows[i].cells[j].getAttribute("cellData") == -1 && (i != x || j != y)){
-                GRID.rows[i].cells[j].innerHTML = "<img src=\'bomb.png\' alt=\'hello\'/>";
+                GRID.rows[i].cells[j].innerHTML = "<img src=\'images/bomb.png\' alt=\'hello\'/>";
             }
         }
     }
@@ -366,7 +372,6 @@ function showBombs(x,y){
 function clearTimer(){
     if(timerInterval != null){
         clearInterval(timerInterval);
-        timerInterval = null;
     }
     miliseconds = 0;
     second = 0;
@@ -403,11 +408,9 @@ function clickZeros(x, y){
 function checkWinCondition(){
     if(clicked == numTiles){
         console.log("Win!");
-        emoji.setAttribute("src", "sunglasses.png");
+        emoji.setAttribute("src", "images/sunglasses.png");
         showBombs();
         clearTimer();
-        timerInterval = null;
-
 
     }
 }
@@ -435,7 +438,7 @@ function addFlag(cell){
             cell.innerHTML = "";
         }
         else{
-            cell.innerHTML = "<img src=\'flag.png\' alt=\'hello\'/>";
+            cell.innerHTML = "<img src=\'images/flag.png\' alt=\'hello\'/>";
             cell.classList.add("flagged");
         }
 
@@ -450,14 +453,13 @@ function resetGame(){
     timer = 0;
     initalizeGame();
     clearTimer();
-    timerInterval = null;
     TIMER.innerHTML = "00:00:00";
     hideAllValues();
     lost = false;
     clicked = 0;
     firstClick = true;
     numTiles = height*width - numMines;
-    emoji.setAttribute("src", "sad.png");
+    emoji.setAttribute("src", "images/sad.png");
     updateCounters()
     if(TESTING){
         showAllValues()

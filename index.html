@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <script src="script.js" defer></script>
 </head>
@@ -19,15 +20,15 @@
     <h1>Welcome!</h1>
     <h2>Minesweeper Game</h2>
 
-    <img id="emoji" src="sad.png"/>
+    <img id="emoji" src="images/sad.png"/>
 
-    <div>
-        <ul id="counters">
-            <li style="visibility:hidden" id="timer">00:00:00</li>
-            <!-- <li id="tileCounter"></li>  <li id="bombCounter"></li>-->
-        </ul>
+    <div id="counters">
+        <p style="visibility:visible" id="timer">00:00:00</p>
+
     </div>
     <table id="grid"></table>
+
+    <p id="flagCounter">Flag Counter</p>
 
     <button class="button" id="diffEasy">Easy</button>  <button class="button" id="diffHard">Hard</button>  <button class="button" id="reset">Reset</button>
 </body>

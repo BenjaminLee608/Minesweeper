@@ -49,12 +49,17 @@ h2{
     position: relative;
 }
 
-#counters li{
+#counters p{
+    font-family: 'VT323', monospace;
+    margin-top: .2em;
     border: 2px solid black;
     text-align: center;
+    transform: scale(1.2, 1);
     background-color: #555555;
-    color: red;
+    color: #ABD7E5;
     display:inline-block;
+    font-weight: bold;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 
 
 }
@@ -79,7 +84,7 @@ h2{
 
 
 table{
-    margin-top: 1em;
+    margin-top: 0em;
     margin-left: auto;
     margin-right: auto;
     border: 2px solid #808080;
@@ -99,6 +104,7 @@ button{
     left: 10px;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     text-align: center;
+
 }
 img{
 
