@@ -14,27 +14,50 @@
 </head>
 
 <body oncontextmenu ="return false;">
+    <div class="flexContainer">
+        <div class="leftSection">
+            <h2>Leaderboard</h2>
+            <ol class = leaderboard>
+                <li id="firstPlace"> </li>
+                <li id="secondPlace"> </li>
+                <li id="thirdPlace"> </li>
+                <li id="fourthPlace"> </li>
+                <li id="fifthPlace"> </li>
+                <li id="sixthPlace"> </li>
+                <li id="seventhPlace"> </li>
+                <li id="eightPlace"> </li>
+                <li id="ninthPlace"> </li>
+                <li id="tenthPlace"> </li>
+            </ol>
+        </div>
 
+        <div class="game">
+            <h1>Welcome!</h1>
+            <h2>Minesweeper Game</h2>
 
+            <img id="emoji" src="images/sad.png"/>
 
-    <h1>Welcome!</h1>
-    <h2>Minesweeper Game</h2>
+            <div id="counters">
+                <p style="visibility:visible" id="timer">00:00:00</p>
 
-    <img id="emoji" src="images/sad.png"/>
+            </div>
+            <table id="grid"></table>
 
-    <div id="counters">
-        <p style="visibility:visible" id="timer">00:00:00</p>
+            <p id="flagCounter">FlagCounter</p>
 
+            <button class="button" id="diffEasy">Easy</button>  <button class="button" id="diffHard">Hard</button>  <button class="button" id="reset">Reset</button>
+
+            <footer>
+                <p>Made by: Benjamin Lee</p>
+                <a href="https://www.github.com/BenjaminLee608/Minesweeper" style="color: black"><i class="fa fa-github fa-2x" ></i></a>
+            </footer>
+
+        </div>
+        <div class="emptyBox">
+
+        </div>
     </div>
-    <table id="grid"></table>
-
-    <p id="flagCounter">Flag Counter</p>
-
-    <button class="button" id="diffEasy">Easy</button>  <button class="button" id="diffHard">Hard</button>  <button class="button" id="reset">Reset</button>
 </body>
 
-<footer>
-    <p>Made by: Benjamin Lee</p>
-    <a href="https://www.github.com/BenjaminLee608/Minesweeper" style="color: black"><i class="fa fa-github fa-2x" ></i></a>
-</footer>
+
 </html>

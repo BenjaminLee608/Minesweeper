@@ -1,3 +1,4 @@
+
 body{
     text-align: center;
     background-color: #DCDCDC;
@@ -37,6 +38,8 @@ h2{
     text-shadow: 2px 2px #999999;
 }
 
+
+
 .clicked{
 
 }
@@ -44,6 +47,34 @@ h2{
 .bomb{
     background-color: red;
 }
+
+.flexContainer{
+    display: flex;
+    flex-direction: columns;
+    flex-wrap: nowrap;
+    margin: 0 auto;
+    justify-content: center;
+}
+
+
+.leftSection, .emptyBox{
+
+    justify-content: center;
+    height: 100vh;
+    vertical-align: center;
+    width: 25%;
+    top: 10em;
+    margin-top: 10em;
+    font-family: 'DotGothic16', sans-serif;
+
+}
+.leftSection .leaderboard{
+
+}
+
+.game{
+}
+
 
 #counters{
     position: relative;
@@ -104,7 +135,7 @@ button{
     left: 10px;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     text-align: center;
-
+    min-width: 1.5em;
 }
 img{
 
