@@ -1,7 +1,7 @@
 Priority List:
 
-- Timer
-    Kind of broken idk why
+X - Timer
+    FIXED
 - MAKE MORE EFFICIENT
     Double for loops
     Get rid of all the continue statements

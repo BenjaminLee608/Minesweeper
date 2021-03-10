@@ -29,13 +29,14 @@
                 <li id="ninthPlace"> </li>
                 <li id="tenthPlace"> </li>
             </ol>
+
         </div>
 
-        <div class="game">
+        <div class="gameContainer" draggable: false;>
             <h1>Welcome!</h1>
             <h2>Minesweeper Game</h2>
 
-            <img id="emoji" src="images/sad.png"/>
+            <img id="emoji" src="images/smile.png"/>
 
             <div id="counters">
                 <p style="visibility:visible" id="timer">00:00:00</p>
@@ -43,7 +44,7 @@
             </div>
             <table id="grid"></table>
 
-            <p id="flagCounter">FlagCounter</p>
+            <p id="bombCounter">Bombs Left:</p>
 
             <button class="button" id="diffEasy">Easy</button>  <button class="button" id="diffHard">Hard</button>  <button class="button" id="reset">Reset</button>
 

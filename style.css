@@ -28,16 +28,25 @@ p{
 }
 
 h1{
-    font-size: 4em;
+    font-size: min(15vw, 100px);
     padding: 0px;
     text-shadow: 2px 2px #999999;
 }
 h2{
-    font-size: 3em;
+    font-size: min(5vw, 33.33px);
     padding: 0px;
     text-shadow: 2px 2px #999999;
 }
 
+.gameContainer{
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
 
 
 .clicked{
@@ -73,6 +82,10 @@ h2{
 }
 
 .game{
+}
+.holdDown{
+    background: #333333;
+    color: #b3b3b3;
 }
 
 

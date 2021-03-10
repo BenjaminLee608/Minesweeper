@@ -13,16 +13,20 @@ var width = 8;
 var numMines = 10;
 var numTiles = height*width - numMines;
 var clicked = 0;
-var flagCounter = 0;
+var bombsLeft = numMines;
 var miliseconds = 0;
 var seconds = 0;
 var minutes = 0;
 var hours = 0;
 var timerInterval = null;
-
+var mouseDown = 0;
 
 var lost = false;
 var firstClick = true;
+
+
+
+
 
 const TESTING = 0;
 
@@ -32,6 +36,7 @@ function createGrid(){
         var row = GRID.insertRow(i);
         for(let j = 0; j < width; j++){
             var cell = row.insertCell(j);
+            //cell.setAttribute('draggable', false);
             cell.onclick = function(){
                 clickCell(this);
                 if(TESTING){
@@ -39,6 +44,39 @@ function createGrid(){
                 }
                 updateCounters()
             };
+            cell.onmousedown = function(){
+                mouseDown = 1;
+                emoji.setAttribute("src", "images/shocked.png");
+                this.classList.add("holdDown");
+
+            };
+            cell.onmouseover = function() {
+                if(emoji.getAttribute("src") == "images/smile.png" && !lost && mouseDown){
+                    emoji.setAttribute("src", "images/shocked.png");
+
+                }
+                if(!cell.classList.contains("clicked") && mouseDown){
+                    let x = this.parentNode.rowIndex;
+                    let y = this.cellIndex;
+                    //console.log("x: " + x + "y: " + y);
+                    this.classList.add("holdDown");
+
+                }
+            };
+
+
+            cell.onmouseout = function() {
+                if(emoji.getAttribute("src") == "images/shocked.png" && !lost && !mouseDown){
+                    emoji.setAttribute("src", "images/smile.png");
+                }
+                this.classList.remove("holdDown");
+            };
+            cell.onmouseup = function() {
+                this.classList.remove("holdDown");
+            };
+
+
+
             var data = document.createAttribute("cellData");
             data.value = 0;
             var onContextMenu = document.createAttribute("oncontextmenu");
@@ -146,7 +184,7 @@ function countBombs2(x,y){
 }
 
 function displayTime(){
-
+    //console.log(miliseconds);
     miliseconds+= 10;
     if(miliseconds > 999){
         seconds++;
@@ -374,7 +412,7 @@ function clearTimer(){
         clearInterval(timerInterval);
     }
     miliseconds = 0;
-    second = 0;
+    seconds = 0;
     minutes = 0;
     hours = 0;
 }
@@ -406,7 +444,7 @@ function clickZeros(x, y){
 }
 
 function checkWinCondition(){
-    if(clicked == numTiles){
+    if(clicked == numTiles){ // WIN! add a score to the Leaderboard
         console.log("Win!");
         emoji.setAttribute("src", "images/sunglasses.png");
         showBombs();
@@ -419,7 +457,7 @@ function initalizeGame(){
     //createArray();
     createGrid();
     addMines(numMines);
-    updateCounters()
+    updateCounters();
 
     if(TESTING){
         showAllValues()
@@ -429,6 +467,7 @@ function initalizeGame(){
 function updateCounters(){
     //TILECOUNTER.innerHTML = clicked;
     //BOMBCOUNTER.innerHTML = numMines - flagCounter;
+    BOMBCOUNTER.innerHTML = "Bomb Counter: " + bombsLeft;
 }
 
 function addFlag(cell){
@@ -440,6 +479,9 @@ function addFlag(cell){
         else{
             cell.innerHTML = "<img src=\'images/flag.png\' alt=\'hello\'/>";
             cell.classList.add("flagged");
+            bombsLeft--;
+            updateCounters();
+
         }
 
 
@@ -448,28 +490,45 @@ function addFlag(cell){
 
 }
 
-function resetGame(){
-
-    GRID.innerHTML = "";
-    timer = 0;
-    initalizeGame();
-    clearTimer();
-
-    hideAllValues();
+function resetValues(){
+    //timer = 0;
     lost = false;
     clicked = 0;
     firstClick = true;
     numTiles = height*width - numMines;
-    emoji.setAttribute("src", "images/sad.png");
+    bombsLeft = numMines;
+    emoji.setAttribute("src", "images/smile.png");
+}
+function resetGame(){
+
+    GRID.innerHTML = "";
+
+    initalizeGame();
+    clearTimer();
+    resetValues()
+    hideAllValues();
     updateCounters()
-    miliseconds = 0;
-    if(TESTING){
-        showAllValues()
-    }
 }
 
 RESETBUTTON.addEventListener("click", function(){resetGame();}, false);
 EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10; resetGame();}, false);
 HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;numTiles = height*width - numMines; resetGame();}, false);
+
+document.body.onmouseup = function(){
+    mouseDown = 1;
+
+};
+
+document.body.onmouseup = function(){
+    mouseDown = 0;
+    if(emoji.getAttribute("src") == "images/shocked.png"){
+        emoji.setAttribute("src", "images/smile.png");
+    }
+
+};
+
 console.log("hi");
+
+
+
 initalizeGame();
