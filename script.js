@@ -36,18 +36,16 @@ function createGrid(){
         var row = GRID.insertRow(i);
         for(let j = 0; j < width; j++){
             var cell = row.insertCell(j);
-            //cell.setAttribute('draggable', false);
-            cell.onclick = function(){
-                clickCell(this);
-                if(TESTING){
-                    showAllValues()
+            cell.onmousedown = function(e){
+                if (e.button === 0) {
+                    mouseDown = 1;
+                    emoji.setAttribute("src", "images/shocked.png");
+                    if(!this.classList.contains("flagged")){
+                        this.classList.add("holdDown");
+                    }
+
                 }
-                updateCounters()
-            };
-            cell.onmousedown = function(){
-                mouseDown = 1;
-                emoji.setAttribute("src", "images/shocked.png");
-                this.classList.add("holdDown");
+
 
             };
             cell.onmouseover = function() {
@@ -55,9 +53,7 @@ function createGrid(){
                     emoji.setAttribute("src", "images/shocked.png");
 
                 }
-                if(!cell.classList.contains("clicked") && mouseDown){
-                    let x = this.parentNode.rowIndex;
-                    let y = this.cellIndex;
+                if(!cell.classList.contains("clicked") && mouseDown && !this.classList.contains("flagged")){
                     //console.log("x: " + x + "y: " + y);
                     this.classList.add("holdDown");
 
@@ -71,8 +67,15 @@ function createGrid(){
                 }
                 this.classList.remove("holdDown");
             };
-            cell.onmouseup = function() {
-                this.classList.remove("holdDown");
+            cell.onmouseup = function(e) {
+                if (e.button === 0) {
+                    this.classList.remove("holdDown");
+                    clickCell(this);
+                    if(TESTING){
+                        showAllValues()
+                    }
+                    updateCounters()
+                }
             };
 
 
@@ -514,17 +517,19 @@ RESETBUTTON.addEventListener("click", function(){resetGame();}, false);
 EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10; resetGame();}, false);
 HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;numTiles = height*width - numMines; resetGame();}, false);
 
-document.body.onmouseup = function(){
-    mouseDown = 1;
-
+document.body.onmouseup = function(e){
+    if (e.button === 0) {
+        mouseDown = 1;
+    }
 };
 
-document.body.onmouseup = function(){
-    mouseDown = 0;
-    if(emoji.getAttribute("src") == "images/shocked.png"){
-        emoji.setAttribute("src", "images/smile.png");
+document.body.onmouseup = function(e){
+    if (e.button === 0) {
+        mouseDown = 0;
+        if(emoji.getAttribute("src") == "images/shocked.png"){
+            emoji.setAttribute("src", "images/smile.png");
+        }
     }
-
 };
 
 console.log("hi");
