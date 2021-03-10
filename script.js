@@ -37,7 +37,7 @@ function createGrid(){
         for(let j = 0; j < width; j++){
             var cell = row.insertCell(j);
             cell.onmousedown = function(e){
-                if (e.button === 0) {
+                if (e.button === 0 && !lost) {
                     mouseDown = 1;
                     emoji.setAttribute("src", "images/shocked.png");
                     if(!this.classList.contains("flagged")){
@@ -53,7 +53,7 @@ function createGrid(){
                     emoji.setAttribute("src", "images/shocked.png");
 
                 }
-                if(!cell.classList.contains("clicked") && mouseDown && !this.classList.contains("flagged")){
+                if(!cell.classList.contains("clicked") && mouseDown && !this.classList.contains("flagged") && !lost){
                     //console.log("x: " + x + "y: " + y);
                     this.classList.add("holdDown");
 
@@ -68,7 +68,7 @@ function createGrid(){
                 this.classList.remove("holdDown");
             };
             cell.onmouseup = function(e) {
-                if (e.button === 0) {
+                if (e.button === 0 && !lost) {
                     this.classList.remove("holdDown");
                     clickCell(this);
                     if(TESTING){
@@ -518,7 +518,7 @@ EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10; re
 HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;numTiles = height*width - numMines; resetGame();}, false);
 
 document.body.onmouseup = function(e){
-    if (e.button === 0) {
+    if (e.button === 0 && !lost) {
         mouseDown = 1;
     }
 };
