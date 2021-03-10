@@ -478,15 +478,15 @@ function addFlag(cell){
         if(cell.classList.contains("flagged")){
             cell.classList.remove("flagged");
             cell.innerHTML = "";
+            bombsLeft++;
+
         }
         else{
             cell.innerHTML = "<img src=\'images/flag.png\' alt=\'hello\'/>";
             cell.classList.add("flagged");
             bombsLeft--;
-            updateCounters();
-
         }
-
+        updateCounters();
 
     }
 
