@@ -103,7 +103,7 @@ function addMines(num,clickX,clickY){
 
         if(cellData.getAttribute("cellData") != -1 && !(x >= clickX-1 && x <= clickX + 1 && y <= clickY + 1 && y >= clickY-1)){
             cellData.setAttribute("cellData", -1);
-            console.log("added bomb on: " + x + ", " + y);
+            //console.log("added bomb on: " + x + ", " + y);
             applyGrid(function(j,k){
                 if(GRID.rows[j].cells[k].getAttribute("cellData") >= 0){
                     GRID.rows[j].cells[k].setAttribute("cellData", parseInt(GRID.rows[j].cells[k].getAttribute("cellData"))+1) ;
@@ -187,9 +187,9 @@ function clickCell(cell){
     if(firstClick){
         //console.log(TIMER.innerHTML);
         timerInterval = setInterval(displayTime,10);
-        console.log("FIRST CLICK ON: " + x + ", " + y);
+        //console.log("FIRST CLICK ON: " + x + ", " + y);
         addMines(numMines,x,y);
-        console.log("end of first clickv");
+        //console.log("end of first clickv");
     }
 
 //End of firstClick
