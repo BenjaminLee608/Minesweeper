@@ -20,6 +20,7 @@ var hours = 0;
 var timerInterval = null;
 var mouseDown = 0;
 var rightMouseDown = 0;
+var bothMouseDown = 0;
 var lost = false;
 var firstClick = true;
 const TESTING = 0;
@@ -45,13 +46,30 @@ function createGrid(){
         for(let j = 0; j < width; j++){
             var cell = row.insertCell(j);
             cell.onmousedown = function(e){
-                if (e.button === 0 && !lost) {
+                if((mouseDown && e.button == 2) || (rightMouseDown && e.button == 0)){
+                    bothMouseDown = 1;
+                }
+
+                if(bothMouseDown){ // if both mouse are held down, open highlight 3x3 around mouse
+                    let x = this.parentNode.rowIndex;
+                    let y = this.cellIndex;
+                    applyGrid(function(j,k){
+                        if(!GRID.rows[j].cells[k].classList.contains("holdDown") && !GRID.rows[j].cells[k].classList.contains("flagged"))GRID.rows[j].cells[k].classList.add("holdDown");
+                    }, x,y);
+
+                }
+                else if (e.button === 0 && !lost) {
                     mouseDown = 1;
                     emoji.setAttribute("src", "images/shocked.png");
                     if(!this.classList.contains("flagged")){
                         this.classList.add("holdDown");
                     }
                 }
+                else if(e.button === 2){
+                    addFlag(this);
+                    rightMouseDown = 1;
+                }
+
             };
             cell.onmouseover = function() {
                 if(emoji.getAttribute("src") == "images/smile.png" && !lost && mouseDown){
@@ -60,7 +78,18 @@ function createGrid(){
                 }
                 if(!cell.classList.contains("clicked") && mouseDown && !this.classList.contains("flagged") && !lost){
                     //console.log("x: " + x + "y: " + y);
-                    this.classList.add("holdDown");
+                    if(bothMouseDown){ // if both mouse are held down, open highlight 3x3 around mouse
+                        let x = this.parentNode.rowIndex;
+                        let y = this.cellIndex;
+                        applyGrid(function(j,k){
+                            if(!GRID.rows[j].cells[k].classList.contains("holdDown") && !GRID.rows[j].cells[k].classList.contains("flagged"))GRID.rows[j].cells[k].classList.add("holdDown");
+                        }, x,y);
+
+                    }
+                    else{
+                        this.classList.add("holdDown");
+                    }
+
                 }
             };
 
@@ -68,10 +97,41 @@ function createGrid(){
                 if(emoji.getAttribute("src") == "images/shocked.png" && !lost && !mouseDown){
                     emoji.setAttribute("src", "images/smile.png");
                 }
-                this.classList.remove("holdDown");
+
+                if(bothMouseDown){ // if both mouse are held down, open highlight 3x3 around mouse
+                    let x = this.parentNode.rowIndex;
+                    let y = this.cellIndex;
+                    applyGrid(function(j,k){
+                        if(GRID.rows[j].cells[k].classList.contains("holdDown"))GRID.rows[j].cells[k].classList.remove("holdDown");
+                    }, x,y);
+
+                }
+                else{
+                    this.classList.remove("holdDown");
+                }
+
             };
             cell.onmouseup = function(e) {
-                if (e.button === 0 && !lost) {
+                if(bothMouseDown && !firstClick){
+                    let x = this.parentNode.rowIndex;
+                    let y = this.cellIndex;
+                    mouseDown = 0;
+                    rightMouseDown = 0;
+                    bothMouseDown = 0;
+                    applyGrid(function(j,k){
+                        if(GRID.rows[j].cells[k].classList.remove("holdDown"));
+                    }, x,y);
+                    let mineCounter = countMines(x,y);
+
+                    if(mineCounter == GRID.rows[x].cells[y].getAttribute("cellData")){
+                        applyGrid(function(j,k){
+                            if(!GRID.rows[j].cells[k].classList.contains("flagged")) clickCell(GRID.rows[j].cells[k]);
+                        }, x,y);
+                    }
+
+                }
+                else if (e.button === 0 && !lost) {
+                    mouseDown = 0;
                     this.classList.remove("holdDown");
                     clickCell(this);
                     if(TESTING){
@@ -79,12 +139,15 @@ function createGrid(){
                     }
                     updateCounters()
                 }
+                else if(e.button === 2){
+                    rightMouseDown = 0;
+                }
             };
 
             var data = document.createAttribute("cellData");
             data.value = 0;
             var onContextMenu = document.createAttribute("oncontextmenu");
-            onContextMenu.value="addFlag(this); return false";
+            onContextMenu.value="return false";
             cell.setAttributeNode(onContextMenu);
             cell.setAttributeNode(data);
             //console.log(cell.getAttribute("cellData"));
@@ -108,7 +171,6 @@ function addMines(num,clickX,clickY){
                 if(GRID.rows[j].cells[k].getAttribute("cellData") >= 0){
                     GRID.rows[j].cells[k].setAttribute("cellData", parseInt(GRID.rows[j].cells[k].getAttribute("cellData"))+1) ;
                 }
-
             },x,y);
         }
         else{
@@ -117,6 +179,24 @@ function addMines(num,clickX,clickY){
         }
     }
 }
+
+function countMines(x,y){
+    let mineCounter = 0;
+    for(let j = x-1; j < x+2; j++){
+        if(!(j < 0 || j >= height)){
+            for(let k = y-1; k < y+2; k++){
+                if(!(k < 0 || k >= width)){
+                    if(GRID.rows[j].cells[k].classList.contains("flagged")){
+                        mineCounter++;
+                    }
+                }
+            }
+        }
+    }
+    console.log(mineCounter);
+    return mineCounter;
+}
+
 function showAllValues(){
     for(let i = 0; i < height; i++){
         for(let j = 0; j < width; j++){
@@ -337,20 +417,47 @@ RESETBUTTON.addEventListener("click", function(){resetGame();}, false);
 EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10; resetGame();}, false);
 HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;numTiles = height*width - numMines; resetGame();}, false);
 
-document.body.onmouseup = function(e){
-    if (e.button === 0 && !lost) {
-        mouseDown = 1;
+
+
+document.body.onmousedown = function(e){
+    //console.log(bothMouseDown);
+    if(!lost && !bothMouseDown){
+        if (e.button === 0) {
+            mouseDown = 1;
+        }
+        else if(e.button === 2){
+            rightMouseDown = 1;
+        }
+
+        if(mouseDown && rightMouseDown){
+            bothMouseDown = 1;
+        }
     }
+
+
 };
 
+
 document.body.onmouseup = function(e){
-    if (e.button === 0) {
+    //console.log(bothMouseDown);
+    if(bothMouseDown){
+        bothMouseDown = 0;
+        mouseDown = 0;
+        rightMouseDown = 0;
+    }
+    else if (e.button === 0) {
         mouseDown = 0;
         if(emoji.getAttribute("src") == "images/shocked.png"){
             emoji.setAttribute("src", "images/smile.png");
         }
     }
+    else if(e.button === 2){
+        rightMouseDown = 0;
+    }
 };
+
+
+
 
 console.log("hi");
 
