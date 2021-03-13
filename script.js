@@ -112,15 +112,20 @@ function createGrid(){
 
             };
             cell.onmouseup = function(e) {
-                if(bothMouseDown && !firstClick){
+                if(bothMouseDown){
+
                     let x = this.parentNode.rowIndex;
                     let y = this.cellIndex;
                     mouseDown = 0;
                     rightMouseDown = 0;
                     bothMouseDown = 0;
+
                     applyGrid(function(j,k){
                         if(GRID.rows[j].cells[k].classList.remove("holdDown"));
                     }, x,y);
+                    if(firstClick){
+                        return;
+                    }
                     let mineCounter = countMines(x,y);
 
                     if(mineCounter == GRID.rows[x].cells[y].getAttribute("cellData")){
