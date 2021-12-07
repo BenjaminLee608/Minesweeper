@@ -13,8 +13,8 @@ const LEADERBOARD = [document.querySelector("#firstPlace"),document.querySelecto
                         document.querySelector("#ninthPlace"),document.querySelector("#tenthPlace")];
 
 
-var height = 8;
-var width = 8;
+var height = 9;
+var width = 9;
 var numMines = 10;
 var numTiles = height*width - numMines;
 var clicked = 0;
@@ -32,8 +32,12 @@ var firstClick = true;
 
 var totalSeconds = localStorage['time'] || 0;
 
-var leaderboardTimes = localStorage['leaderboard'] || [];
+var leaderboardTimes = [];
 
+var stored = localStorage['leaderboardTimes'];
+if (stored) leaderboardTimes = JSON.parse(stored);
+
+updateLeaderboard();
 
 
 console.log(totalSeconds);
@@ -356,7 +360,7 @@ function checkWinCondition(){
         console.log(totalSeconds);
         localStorage['time'] = totalSeconds;
         addToLeaderBoard(totalSeconds);
-        
+        updateLeaderboard();
 
         emoji.setAttribute("src", "images/sunglasses.png");
         showBombs();
@@ -372,10 +376,13 @@ function addToLeaderBoard(totalSeconds){
     while(leaderboardTimes.length > 10){
         leaderboardTimes.pop();
     }
+    localStorage['leaderboardTimes'] = JSON.stringify(leaderboardTimes);
 }
 
 function updateLeaderboard(){
-    for(int i = 0; i < )
+    for(let i = 0; i < leaderboardTimes.length; i++){
+        LEADERBOARD[i].innerHTML = leaderboardTimes[i];
+    }
 }
 
 function initalizeGame(){
@@ -390,7 +397,6 @@ function initalizeGame(){
 }
 
 function updateCounters(){
-
     BOMBCOUNTER.innerHTML = "Bomb Counter: " + bombsLeft;
 }
 
@@ -435,7 +441,7 @@ function resetGame(){
 }
 
 RESETBUTTON.addEventListener("click", function(){resetGame();}, false);
-EASYBUTTON.addEventListener("click", function(){height=8;width=8;numMines=10; resetGame();}, false);
+EASYBUTTON.addEventListener("click", function(){height=9;width=9;numMines=10; resetGame();}, false);
 HARDBUTTON.addEventListener("click", function(){height=16;width=30;numMines=99;numTiles = height*width - numMines; resetGame();}, false);
 
 
