@@ -35,6 +35,7 @@ var totalSeconds = localStorage['time'] || 0;
 var leaderboardTimes = [];
 
 var stored = localStorage['leaderboardTimes'];
+
 if (stored) leaderboardTimes = JSON.parse(stored);
 
 updateLeaderboard();
@@ -356,7 +357,7 @@ function checkWinCondition(){
     if(clicked == numTiles){ // WIN! add a score to the Leaderboard
         console.log("Win!");
 
-        totalSeconds = seconds + minutes*60 + hours*3600 + miliseconds*.001;
+        totalSeconds = seconds*100 + minutes*6000 + miliseconds/10;
         console.log(totalSeconds);
         localStorage['time'] = totalSeconds;
         addToLeaderBoard(totalSeconds);
@@ -368,7 +369,6 @@ function checkWinCondition(){
 
     }
 }
-
 function addToLeaderBoard(totalSeconds){
     leaderboardTimes.push(totalSeconds);
     leaderboardTimes.sort();
@@ -381,7 +381,9 @@ function addToLeaderBoard(totalSeconds){
 
 function updateLeaderboard(){
     for(let i = 0; i < leaderboardTimes.length; i++){
-        LEADERBOARD[i].innerHTML = leaderboardTimes[i];
+
+        var tempMilis = leaderboardTimes[i]/100;
+        LEADERBOARD[i].innerHTML = tempMilis;
     }
 }
 
